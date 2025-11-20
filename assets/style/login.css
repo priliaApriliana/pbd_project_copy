@@ -1,0 +1,139 @@
+/* === GLOBAL === */
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+  }
+  
+  /* === GLASS EFFECT BOX === */
+  .login-box {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    width: 360px;
+    padding: 40px 35px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    color: white;
+  }
+  
+  /* Avatar */
+  .login-avatar {
+    width: 70px;
+    height: 70px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 34px;
+    color: #ffffff;
+  }
+  
+  /* Title */
+  .login-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #ffffff;
+  }
+  
+  /* === INPUTS === */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .input-icon {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  
+  .input-icon i {
+    color: #e2e8f0;
+    font-size: 1rem;
+    margin-right: 10px;
+  }
+  
+  .input-icon input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    flex: 1;
+    font-size: 0.95rem;
+  }
+  
+  .input-icon input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  /* === OPTIONS === */
+  .options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+  }
+  
+  .options input {
+    margin-right: 6px;
+    accent-color: #2f5d37;
+  }
+  
+  .forgot-link {
+    color: #b2e1c9;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  
+  .forgot-link:hover {
+    color: white;
+    text-decoration: underline;
+  }
+  
+  /* === BUTTON === */
+  .btn-login {
+    width: 100%;
+    background: #234f2e;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    letter-spacing: 0.5px;
+  }
+  
+  .btn-login:hover {
+    background: #1b3f25;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  }
+  
+  /* === RESPONSIVE === */
+  @media (max-width: 480px) {
+    .login-box {
+      width: 90%;
+      padding: 30px 25px;
+    }
+  }
+  

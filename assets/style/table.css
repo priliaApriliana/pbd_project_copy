@@ -1,0 +1,260 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f9fff9 0%, #ebf8f1 100%);
+    margin: 0;
+    padding: 0;
+    color: #1e293b;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Header Halaman */
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .page-header img {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .page-header h2 {
+    font-size: 1.6rem;
+    color: #1e293b;
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  /* Tombol Tambah */
+  .btn-add {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: #22c55e;
+    color: white;
+    padding: 12px 0;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.25s;
+    margin-bottom: 20px;
+  }
+  
+  .btn-add:hover {
+    background: #16a34a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+  }
+  
+  /* Table Wrapper */
+  .table-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+  }
+  
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .data-table thead {
+    background: #f1f5f9;
+  }
+  
+  .data-table th {
+    padding: 14px;
+    text-align: left;
+    font-weight: 600;
+    color: #334155;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .data-table td {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  
+  .data-table tbody tr:hover {
+    background: #f9fafb;
+    transition: 0.2s;
+  }
+  
+  /* Status badge */
+  .status {
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+  
+  .status.aktif {
+    background: #dcfce7;
+    color: #16a34a;
+  }
+  
+  .status.nonaktif {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+  
+  /* Tombol aksi */
+  .btn-edit,
+  .btn-delete {
+    padding: 6px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: 0.2s;
+    display: inline-block;       /* tampil horizontal */
+    width: auto;                 /* jangan paksa full width */
+    margin-right: 6px;           /* beri jarak antar tombol */
+    padding: 4px 10px;
+  }
+  
+  .btn-edit {
+    background: #fde68a;
+    color: #78350f;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  
+  .btn-edit:hover {
+    background: #fbbf24;
+  }
+  
+  .btn-delete {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  
+  .btn-delete:hover {
+    background: #dc2626;
+  } 
+
+  /* Pastikan semua tombol dalam kolom aksi sejajar */
+.table-card td .aksi {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* jarak antar tombol */
+  }
+  
+  /* Style tombol */
+  .btn-detail {
+    background-color: #ffc107;
+    color: #000;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  
+  .btn-detail:hover {
+    background-color: #e0a800;
+    color: #000;
+  }
+  
+  .btn-delete {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  
+  .btn-delete:hover {
+    background-color: #bb2d3b;
+  }
+  
+
+  .no-data {
+    text-align: center;
+    color: #94a3b8;
+    padding: 16px;
+    font-style: italic;
+  }
+  
+  .dropdown-toggle {
+    background-color: #f9fafb !important;
+    color: #333 !important;
+    border-radius: 24px !important;
+    font-weight: 500;
+    padding: 8px 16px;
+  }
+  
+  .dropdown-toggle:hover {
+    background-color: #eef1f4 !important;
+  }
+  
+  .dropdown-menu {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  /* Tombol tambah barang panjang penuh */
+.btn-add {
+    display: block;
+    width: 100%;
+    background-color: #00a86b; /* hijau segar */
+    color: white;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .btn-add:hover {
+    background-color: #008b5a;
+    color: white;
+    text-decoration: none;
+  }
+  
+  /* Dropdown filter */
+  .dropdown button {
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-weight: 500;
+  }
+  
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  h2 {
+    font-size: 22px;
+    margin: 0;
+    color: #1d3557;
+  }
+  
+  .dropdown-menu {
+    z-index: 1050; /* biar muncul di atas card */
+  }
+  

@@ -1,0 +1,128 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f9fff9 0%, #ebf8f1 100%);
+    margin: 0;
+    padding: 0;
+    color: #1e293b;
+  }
+  
+  /* Layout agar main sejajar sidebar */
+  .main {
+    margin-left: 240px;
+    padding: 30px;
+    min-height: 100vh;
+  }
+  
+  /* Header atas */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .header h2 {
+    font-weight: 700;
+    margin: 0;
+  }
+  
+  .header p {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  
+  .header-right .btn-success {
+    background: #22c55e;
+    border: none;
+    padding: 10px 18px;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+  
+  .header-right .btn-success:hover {
+    background: #16a34a;
+  }
+  
+  /* Table section */
+  .table-card {
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+  
+  .table thead {
+    background: #f1f5f9;
+  }
+  
+  .table th {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #334155;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .table td {
+    font-size: 0.95rem;
+    color: #1e293b;
+  }
+  
+  .table tbody tr:hover {
+    background: #f9fafb;
+  }
+  
+  /* Status badge */
+  .status {
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+  
+  .status.aktif {
+    background: #dcfce7;
+    color: #16a34a;
+  }
+  
+  .status.nonaktif {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+  
+  /* Tombol Aksi */
+  .btn-edit,
+  .btn-delete {
+    padding: 6px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: 0.2s;
+  }
+  
+  .btn-edit {
+    background: #fde68a;
+    color: #78350f;
+  }
+  
+  .btn-edit:hover {
+    background: #fbbf24;
+  }
+  
+  .btn-delete {
+    background: #ef4444;
+    color: #fff;
+  }
+  
+  .btn-delete:hover {
+    background: #dc2626;
+  }
+  
+  .no-data {
+    text-align: center;
+    color: #94a3b8;
+    padding: 16px;
+    font-style: italic;
+  }
+  
