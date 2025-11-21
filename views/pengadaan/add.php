@@ -20,6 +20,7 @@ if (!isset($_SESSION['user']['logged_in']) || $_SESSION['user']['logged_in'] !==
 // Ambil info user login
 $username = $_SESSION['user']['username'] ?? 'Tidak diketahui';
 $iduser   = $_SESSION['user']['iduser'] ?? '';
+
 ?>
 
 <!DOCTYPE html>

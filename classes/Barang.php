@@ -63,5 +63,19 @@ class Barang {
         $res = $stmt->get_result();
         return $res->fetch_assoc() ?: null;
     }
+
+    // === BARU: Ambil ID barang terakhir untuk auto generate ===
+    public function getLastIdBarang(): ?string
+    {
+        $sql = "SELECT idbarang FROM barang ORDER BY idbarang DESC LIMIT 1";
+        $result = $this->conn->query($sql);
+        
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['idbarang'];               // misal: B012
+        }
+        return null;                               // tabel masih kosong
+    }
+    
 }
 ?>

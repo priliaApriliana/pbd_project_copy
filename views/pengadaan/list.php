@@ -59,7 +59,7 @@ $data = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
       <label class="fw-bold me-2">Filter Status:</label>
       <select name="status" class="form-select w-auto d-inline">
         <option value="all" <?= $status == 'all' ? 'selected' : '' ?>>Semua</option>
-        <option value="pending" <?= $status == 'pending' ? 'selected' : '' ?>>Pending</option>
+        <option value="pending" <?= $status == 'pending' ? 'selected' : '' ?>>Di Proses</option>
       </select>
       <button class="btn btn-success btn-sm ms-2">Tampilkan</button>
       <a href="add.php" class="btn btn-primary btn-sm float-end">+ Tambah Pengadaan</a>
@@ -97,7 +97,7 @@ $data = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
                 switch ($row['status']) {
                   case 'P': 
                   case 'A': // 💥 TAMBAHKAN INI
-                      echo '<span class="badge bg-warning text-dark">Pending</span>'; 
+                      echo '<span class="badge bg-warning text-dark"> Di Proses</span>'; 
                       break;
                   case 'S': 
                       echo '<span class="badge bg-success">Selesai</span>'; 

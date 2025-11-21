@@ -15,15 +15,6 @@ $conn = (new DBConnection())->getConnection();
 $idpenerimaan = $_POST['idpenerimaan'];
 $iduser = $_SESSION['user']['iduser'];
 
-$stock = isset($_POST['stock']) && $_POST['stock'] !== '' 
-    ? intval($_POST['stock']) 
-    : null;
-
-if ($stock === null) {
-    die("Error: field stock wajib diisi!");
-}
-
-
 // VALIDASI status penerimaan
 $cek = $conn->query("SELECT status FROM penerimaan WHERE idpenerimaan = $idpenerimaan")->fetch_assoc();
 
@@ -37,7 +28,8 @@ $idretur = $retur->createRetur($idpenerimaan, $iduser);
 // Loop detail retur
 foreach ($_POST['retur_jumlah'] as $iddetail => $jumlah) {
 
-    if ($jumlah <= 0) continue;
+    // Skip kalau kosong
+    if ($jumlah === '' || $jumlah <= 0) continue;
 
     // Cek jumlah terima aslinya
     $cekJumlah = $conn->query("
@@ -52,6 +44,7 @@ foreach ($_POST['retur_jumlah'] as $iddetail => $jumlah) {
 
     $alasan = $_POST['retur_alasan'][$iddetail];
 
+    // simpan detail retur
     $retur->createDetailRetur($idretur, $iddetail, $jumlah, $alasan);
 }
 

@@ -17,22 +17,19 @@ $stmt->bind_param("s", $status);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+  // Filter manual sesuai dropdown
+  if ($status === 'proses') {
+    $data = array_filter($data, function($row) {
+        return $row['status'] === 'P';
+    });
+  } elseif ($status === 'selesai') {
+    $data = array_filter($data, function($row) {
+        return $row['status'] === 'S';
+    });
+  }
+
 $stmt->close();
 $conn->next_result();
-
-// Ambil detail penerimaan jika diminta
-$details = [];
-if (isset($_GET['detail']) && !empty($_GET['detail'])) {
-    $idp = $_GET['detail'];
-
-    $stmt = $conn->prepare("CALL sp_get_detail_penerimaan(?)");
-    $stmt->bind_param("i", $idp);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    $details = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
-    $stmt->close();
-    $conn->next_result();
-}
 ?>
 
 <!DOCTYPE html>
@@ -79,14 +76,14 @@ if (isset($_GET['detail']) && !empty($_GET['detail'])) {
     <form method="get" class="mb-3 position-relative">
       <label class="fw-bold me-2">Filter Status:</label>
       <select name="status" class="form-select w-auto d-inline">
-        <option value="all"      <?= $status == 'all' ? 'selected' : '' ?>>Semua</option>
-        <option value="aktif"    <?= $status == 'aktif' ? 'selected' : '' ?>>Aktif</option>
-        <option value="nonaktif" <?= $status == 'nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
+      <option value="all"      <?= $status == 'all' ? 'selected' : '' ?>>Semua</option>
+      <option value="proses"   <?= $status == 'proses' ? 'selected' : '' ?>>Sebagian Diterima</option>
+      <option value="selesai"  <?= $status == 'selesai' ? 'selected' : '' ?>>Selesai</option>
       </select>
 
       <button class="btn btn-success btn-sm ms-2">Tampilkan</button>
 
-      <!-- 🔥 Tombol di kanan seperti Pengadaan -->
+      <!-- Tombol di kanan -->
       <a href="add.php" class="btn btn-primary btn-sm float-end">+ Tambah Penerimaan</a>
     </form>
 
@@ -117,7 +114,7 @@ if (isset($_GET['detail']) && !empty($_GET['detail'])) {
               <td class="text-center">
                 <?php
                   switch ($row['status']) {
-                      case 'P': echo '<span class="badge bg-warning text-dark">Pending</span>'; break;
+                      case 'P': echo '<span class="badge bg-warning text-dark">Sebagian Diterima</span>'; break;
                       case 'S': echo '<span class="badge bg-success">Selesai</span>'; break;
                       case 'R': echo '<span class="badge bg-danger">Revisi</span>'; break;
                       case 'C': echo '<span class="badge bg-secondary">Batal</span>'; break;
@@ -129,7 +126,8 @@ if (isset($_GET['detail']) && !empty($_GET['detail'])) {
               <td class="text-center"><?= $row['tanggal_penerimaan'] ?></td>
 
               <td class="text-center">
-                <a href="?detail=<?= $row['kode_penerimaan'] ?>"
+                <!-- 🔥 UBAH DI SINI: Link ke detail.php -->
+                <a href="detail.php?id=<?= $row['kode_penerimaan'] ?>"
                    class="btn btn-outline-primary btn-sm">Lihat</a>
               </td>
 
@@ -153,44 +151,9 @@ if (isset($_GET['detail']) && !empty($_GET['detail'])) {
 
   </div>
 
-  <!-- DETAIL SECTION -->
-  <?php if (!empty($details)): ?>
-    <div class="card p-4 shadow-sm mt-4">
-      <h5 class="fw-bold mb-3">📑 Detail Barang Diterima</h5>
-
-      <table class="table table-striped align-middle">
-        <thead class="table-light text-center">
-          <tr>
-            <th>ID Detail</th>
-            <th>Barang</th>
-            <th>Satuan</th>
-            <th>Jumlah</th>
-            <th>Harga</th>
-            <th>Subtotal</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <?php foreach ($details as $d): ?>
-            <tr>
-              <td class="text-center"><?= $d['iddetail_penerimaan'] ?></td>
-              <td><?= $d['nama_barang'] ?></td>
-              <td class="text-center"><?= $d['nama_satuan'] ?></td>
-              <td class="text-end"><?= number_format($d['jumlah_terima']) ?></td>
-              <td class="text-end">Rp <?= number_format($d['harga_satuan_terima']) ?></td>
-              <td class="text-end fw-bold">Rp <?= number_format($d['sub_total_terima']) ?></td>
-            </tr>
-          <?php endforeach; ?>
-        </tbody>
-
-      </table>
-    </div>
-
-  <?php elseif (isset($_GET['detail'])): ?>
-    <div class="alert alert-warning mt-3">⚠ Detail tidak ditemukan.</div>
-  <?php endif; ?>
-
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

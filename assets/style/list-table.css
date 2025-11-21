@@ -1,0 +1,336 @@
+/* ========================================
+   LIST TABLE STYLE - Reusable CSS
+   File: assets/style/list-table.css
+   ======================================== */
+
+   body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
+    min-height: 100vh;
+}
+
+.main {
+    margin-left: 280px;
+    padding: 30px 20px;
+    transition: all 0.3s;
+}
+
+/* Page Title */
+.page-title {
+    color: #1e6b2a;
+    font-weight: 600;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.page-title img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+
+/* Card Styling */
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: 1px solid rgba(76,175,80,0.15);
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #2e7d32, #4caf50);
+    color: white;
+    padding: 18px 25px;
+}
+
+.card-header h5 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Add Button */
+.btn-add {
+    background: linear-gradient(135deg, #2e7d32, #4caf50);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 6px 15px rgba(46,125,50,0.3);
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-add:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(46,125,50,0.4);
+    color: white;
+}
+
+/* Search Box */
+.search-box {
+    position: relative;
+    max-width: 380px;
+}
+
+.search-box input {
+    padding-left: 45px;
+    border-radius: 14px;
+    border: 1px solid #c8e6c9;
+    height: 48px;
+    transition: all 0.3s;
+}
+
+.search-box input:focus {
+    border-color: #4caf50;
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.search-box i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #4caf50;
+    font-size: 18px;
+}
+
+/* Table Styling */
+.table thead th {
+    background: #e8f5e8;
+    color: #2e7d32;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    border: none;
+    padding: 15px 12px;
+}
+
+.table tbody tr {
+    background: white;
+    transition: all 0.3s;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.table tbody tr:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    background: #f1f8f4;
+}
+
+.table tbody td {
+    padding: 15px 12px;
+    vertical-align: middle;
+}
+
+/* Status Badge */
+.status {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status.aktif {
+    background: #c8e6c9;
+    color: #1b5e20;
+}
+
+.status.nonaktif {
+    background: #ffcdd2;
+    color: #c62828;
+}
+
+/* Action Buttons */
+.action-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-edit {
+    background: #fff8e1;
+    color: #f57c00;
+}
+
+.btn-edit:hover { 
+    background: #ffca28; 
+    color: white;
+    transform: scale(1.1);
+}
+
+.btn-delete {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.btn-delete:hover { 
+    background: #ef5350; 
+    color: white;
+    transform: scale(1.1);
+}
+
+.btn-view {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.btn-view:hover {
+    background: #2196f3;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Empty State */
+.no-data {
+    text-align: center;
+    padding: 80px 20px;
+    color: #666;
+}
+
+.no-data i {
+    font-size: 60px;
+    color: #c8e6c9;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.no-data div {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.no-data small {
+    font-size: 14px;
+    color: #999;
+}
+
+/* Filter Dropdown */
+.dropdown-toggle {
+    border-radius: 14px;
+    padding: 12px 20px;
+    font-weight: 500;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-menu {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: 1px solid #e0e0e0;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    transition: all 0.3s;
+}
+
+.dropdown-item:hover {
+    background: #e8f5e8;
+    color: #2e7d32;
+}
+
+.dropdown-item.active {
+    background: #4caf50;
+    color: white;
+}
+
+/* Badge Counter */
+.badge.bg-light {
+    padding: 8px 16px;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .main { 
+        margin-left: 0; 
+        padding: 20px 15px;
+    }
+    
+    .search-box { 
+        max-width: 100%; 
+        margin-bottom: 15px; 
+    }
+    
+    .page-title {
+        font-size: 24px;
+    }
+    
+    .table {
+        font-size: 14px;
+    }
+    
+    .action-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .btn-add {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .table thead {
+        display: none;
+    }
+    
+    .table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 15px;
+    }
+    
+    .table tbody tr:hover {
+        transform: none;
+    }
+    
+    .table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border: none;
+    }
+    
+    .table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #2e7d32;
+    }
+    
+    .table tbody td:last-child {
+        justify-content: center;
+        gap: 10px;
+    }
+}

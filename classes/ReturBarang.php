@@ -68,7 +68,11 @@ class ReturBarang {
        4. INSERT DETAIL RETUR
     ============================================================ */
     public function createDetailRetur($idretur, $iddetail_penerimaan, $jumlah, $alasan) {
-
+        
+        // SKIP kalau jumlah kosong
+        if ($jumlah === null || $jumlah === '' || $jumlah <= 0) {
+            return false;
+        }
         // hindari duplikasi — generate ID retur yang aman
         $kode = "DR" . str_pad(rand(1, 99999), 5, "0", STR_PAD_LEFT);
 

@@ -1,0 +1,243 @@
+/* ============================================
+   DETAIL PAGE STYLE
+   For: Penerimaan, Retur, Penjualan Detail
+   ============================================ */
+
+/* Fix Body Overflow */
+body {
+    overflow-x: hidden;
+  }
+  
+  /* Container Layout - Adjust untuk sidebar */
+  .detail-container {
+    margin-left: 260px;
+    padding-right: 30px;
+    padding-left: 15px;
+    max-width: calc(100vw - 290px);
+  }
+  
+  /* Card Styling */
+  .detail-card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .detail-card-header {
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .detail-card-body {
+    padding: 0;
+  }
+  
+  /* Info Table (untuk informasi penerimaan/retur/penjualan) */
+  .info-table {
+    margin-bottom: 0;
+  }
+  
+  .info-table td {
+    padding: 0.75rem 1rem;
+    border: none;
+    vertical-align: middle;
+  }
+  
+  .info-table td:first-child {
+    font-weight: 600;
+    color: #495057;
+    width: 200px;
+  }
+  
+  .info-table td:last-child {
+    color: #212529;
+  }
+  
+  /* Table Detail Barang */
+  .detail-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .detail-table {
+    min-width: 100%;
+    white-space: nowrap;
+    margin-bottom: 0;
+  }
+  
+  .detail-table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #dee2e6;
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+  }
+  
+  .detail-table tbody td {
+    padding: 0.875rem 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .detail-table tbody tr:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.2s ease;
+  }
+  
+  .detail-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Total Section */
+  .detail-table tfoot {
+    background-color: #f8f9fa;
+    border-top: 3px solid #dee2e6;
+  }
+  
+  .detail-table tfoot td {
+    padding: 1rem 0.75rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  
+  .total-amount {
+    color: #28a745;
+    font-size: 1.25rem;
+  }
+  
+  /* Status Badge */
+  .status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: inline-block;
+  }
+  
+  /* Action Buttons */
+  .detail-actions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #e9ecef;
+  }
+  
+  .detail-btn {
+    padding: 0.625rem 1.5rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+  
+  .detail-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .detail-btn i {
+    margin-right: 0.5rem;
+  }
+  
+  /* Back Button */
+  .back-button {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Responsive untuk kolom tabel */
+  @media (max-width: 1400px) {
+    .detail-table {
+      font-size: 0.9rem;
+    }
+    
+    .detail-table thead th,
+    .detail-table tbody td {
+      padding: 0.75rem 0.5rem;
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .detail-container {
+      margin-left: 0;
+      max-width: 100%;
+      padding: 15px;
+    }
+    
+    .info-table td:first-child {
+      width: 150px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .detail-table {
+      font-size: 0.85rem;
+    }
+    
+    .info-table td:first-child {
+      width: 120px;
+    }
+    
+    .detail-actions {
+      flex-direction: column;
+    }
+    
+    .detail-actions .btn {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  /* Print Styling */
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    
+    .detail-card,
+    .detail-card * {
+      visibility: visible;
+    }
+    
+    .detail-card {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      box-shadow: none;
+      margin: 0;
+    }
+    
+    .detail-btn,
+    .back-button,
+    .sidebar,
+    .detail-actions {
+      display: none !important;
+    }
+    
+    .detail-table-wrapper {
+      overflow: visible;
+    }
+    
+    .detail-card-header {
+      background-color: #fff !important;
+      color: #000 !important;
+      border-bottom: 2px solid #000;
+    }
+  }
+  
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6c757d;
+  }
+  
+  .empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }

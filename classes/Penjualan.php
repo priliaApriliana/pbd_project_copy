@@ -231,5 +231,30 @@ class Penjualan {
     public function getById($idpenjualan) {
         return $this->getPenjualanById($idpenjualan);
     }
+
+    public function getFiltered($kasir, $tanggal)
+{
+    $sql = "SELECT * FROM v_penjualan_all WHERE 1=1";
+
+    if ($kasir !== 'all') {
+        $sql .= " AND kasir = '$kasir'";
+    }
+
+    if ($tanggal === 'today') {
+        $sql .= " AND DATE(tanggal) = CURDATE()";
+    }
+    elseif ($tanggal === 'week') {
+        $sql .= " AND tanggal >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
+    }
+    elseif ($tanggal === 'month') {
+        $sql .= " AND tanggal >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)";
+    }
+
+    $sql .= " ORDER BY tanggal DESC";
+
+    $result = $this->conn->query($sql);
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+
 }
 ?>
