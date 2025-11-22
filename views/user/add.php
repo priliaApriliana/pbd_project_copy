@@ -1,5 +1,6 @@
 <?php
-// views/user/add.php
+session_start();
+
 require_once(__DIR__ . "/../../classes/User.php");
 require_once(__DIR__ . "/../../classes/Role.php");
 
@@ -7,9 +8,8 @@ $userObj = new User();
 $roleObj = new Role();
 
 $error = "";
-$success = "";
 
-// Ambil daftar role (dari view v_role)
+// Ambil daftar role dari view v_role
 $roles = $roleObj->getAll();
 
 // Proses Insert User
@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = trim($_POST['password']);
     $idrole = trim($_POST['idrole']);
 
-    // Validasi
     if (empty($iduser) || empty($username) || empty($password) || empty($idrole)) {
         $error = "Semua field wajib diisi!";
     } else {
@@ -39,28 +38,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah User</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/style/dashboard.css">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons Global -->
+    <link rel="stylesheet" href="../../assets/icons/bootstrap-icons.min.css">
+
+    <!-- CSS ADD USER -->
     <link rel="stylesheet" href="../../assets/style/add.css">
 </head>
+
 <body>
 
 <?php include(__DIR__ . '/../layout/sidebar.php'); ?>
 
 <div class="main-content">
-    <div class="container">
-        <div class="header">
-            <div class="header-icon">➕</div>
-            <h1>Tambah User Baru</h1>
+
+    <div class="form-container">
+
+        <!-- Header -->
+        <div class="form-header">
+            <div class="header-icon">+</div>
+            <div>
+                <h1>Tambah User Baru</h1>
+                <p>Menambahkan user baru ke dalam sistem Inventori</p>
+            </div>
         </div>
 
+        <!-- Error -->
         <?php if (!empty($error)): ?>
-            <div class="alert alert-error">
-                ⚠️ <?= htmlspecialchars($error); ?>
+            <div class="alert-error">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <?= htmlspecialchars($error); ?>
             </div>
         <?php endif; ?>
 
+        <!-- Form -->
         <form method="POST">
+
             <div class="form-group">
                 <label>ID User <span class="required">*</span></label>
                 <input type="text" name="iduser" placeholder="Contoh: U003" required maxlength="10">
@@ -77,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
 
             <div class="form-group">
-                <label for="idrole">Role <span class="required">*</span></label>
+                <label>Role <span class="required">*</span></label>
                 <select name="idrole" required>
                     <option value="">-- Pilih Role --</option>
                     <?php foreach ($roles as $r): ?>
@@ -88,12 +104,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </div>
 
-            <div class="button-group">
-                <button type="submit" class="btn btn-submit">💾 Simpan Data</button>
-                <button type="button" class="btn btn-cancel" onclick="window.location.href='list.php'">✖️ Batal</button>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check2-circle"></i> Simpan Data
+                </button>
+
+                <button type="button" class="btn btn-secondary"
+                        onclick="window.location.href='list.php'">
+                    <i class="bi bi-x-circle"></i> Batal
+                </button>
             </div>
+
         </form>
+
     </div>
+
 </div>
 
 </body>

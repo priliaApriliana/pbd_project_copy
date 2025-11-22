@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // views/satuan/add.php
 require_once(__DIR__ . "/../../classes/Satuan.php");
 
@@ -29,28 +31,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Satuan</title>
+    <title>Tambah Satuan Baru</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/style/dashboard.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons Global -->
+    <link rel="stylesheet" href="../../assets/icons/bootstrap-icons.min.css">
+
+    <!-- ADD FORM CSS -->
     <link rel="stylesheet" href="../../assets/style/add.css">
 </head>
+
 <body>
 
 <?php include(__DIR__ . '/../layout/sidebar.php'); ?>
 
 <div class="main-content">
-    <div class="container">
 
-        <div class="header">
-            <div class="header-icon">➕</div>
-            <h1>Tambah Satuan Baru</h1>
+    <div class="form-container">
+
+        <!-- HEADER -->
+        <div class="form-header">
+            <div class="header-icon">+</div>
+            <div>
+                <h1>Tambah Satuan Baru</h1>
+                <p>Menambahkan satuan baru ke dalam sistem Inventori</p>
+            </div>
         </div>
 
+        <!-- ERROR -->
         <?php if (!empty($error)): ?>
-            <div class="alert alert-error">⚠️ <?= htmlspecialchars($error); ?></div>
+            <div class="alert-error">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <?= htmlspecialchars($error); ?>
+            </div>
         <?php endif; ?>
 
+        <!-- FORM -->
         <form method="POST">
 
             <div class="form-group">
@@ -72,13 +90,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </select>
             </div>
 
-            <div class="button-group">
-                <button type="submit" class="btn btn-submit">💾 Simpan Data</button>
-                <button type="button" class="btn btn-cancel" onclick="window.location.href='list.php'">✖️ Batal</button>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check2-circle"></i> Simpan Data
+                </button>
+
+                <button type="button" class="btn btn-secondary"
+                        onclick="window.location.href='list.php'">
+                    <i class="bi bi-x-circle"></i> Batal
+                </button>
             </div>
 
         </form>
+
     </div>
+
 </div>
 
 </body>

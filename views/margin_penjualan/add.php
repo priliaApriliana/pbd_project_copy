@@ -1,8 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['user']['logged_in']) || $_SESSION['user']['logged_in'] !== true) {
-  header("Location: ../login.php");
-  exit();
+    header("Location: ../login.php");
+    exit();
 }
 
 require_once(__DIR__ . "/../../classes/MarginPenjualan.php");
@@ -10,22 +10,20 @@ $marginObj = new MarginPenjualan();
 
 $message = "";
 
+// Proses Insert
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = trim($_POST['idmargin']);
-    $persen = $_POST['persen'];
-    $iduser = $_SESSION['user']['iduser'];
+    $idmargin = trim($_POST['idmargin']);
+    $persen   = trim($_POST['persen']);
+    $iduser   = $_SESSION['user']['iduser'];
 
-    // Validasi ID tidak boleh kosong
-    if (empty($id)) {
+    if ($idmargin === "") {
         $message = "ID Margin harus diisi!";
+    } 
+    elseif ($marginObj->isIdExists($idmargin)) {
+        $message = "ID Margin '$idmargin' sudah digunakan!";
     }
-    // Validasi ID belum ada di database
-    elseif ($marginObj->isIdExists($id)) {
-        $message = "ID Margin '$id' sudah digunakan!";
-    }
-    // Proses insert
     else {
-        if ($marginObj->create($id, $persen, $iduser)) {
+        if ($marginObj->create($idmargin, $persen, $iduser)) {
             header("Location: list.php?success=1");
             exit();
         } else {
@@ -38,51 +36,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Tambah Margin Penjualan</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/style/dashboard.css">
-  <link rel="stylesheet" href="../../assets/style/add.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Margin Penjualan</title>
+
+    <!-- Fonts + Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/icons/bootstrap-icons.min.css">
+
+    <!-- CSS Form Global -->
+    <link rel="stylesheet" href="../../assets/style/add.css">
 </head>
 <body>
 
 <?php include(__DIR__ . '/../layout/sidebar.php'); ?>
 
-<div class="main">
-  <div class="container">
+<div class="main-content">
 
-    <h2 class="mt-4 mb-3">Tambah Margin Penjualan</h2>
+    <div class="form-container">
 
-    <?php if ($message): ?>
-      <div class="alert alert-danger"><?= htmlspecialchars($message) ?></div>
-    <?php endif; ?>
+        <!-- HEADER -->
+        <div class="form-header">
+            <div class="header-icon">%</div>
+            <div>
+                <h1>Tambah Margin Penjualan</h1>
+                <p>Menambahkan margin baru untuk harga penjualan barang</p>
+            </div>
+        </div>
 
-    <form method="POST" class="form-card">
+        <!-- ERROR MESSAGE -->
+        <?php if (!empty($message)): ?>
+            <div class="alert-error">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <?= htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
 
-      <div class="mb-3">
-        <label class="form-label">ID Margin <span class="text-danger">*</span></label>
-        <input type="text" name="idmargin" class="form-control" 
-               placeholder="Contoh: M004" 
-               value="<?= isset($_POST['idmargin']) ? htmlspecialchars($_POST['idmargin']) : '' ?>"
-               required maxlength="10">
-        <small class="text-muted">Format: M001, M002, M003, dst. Maksimal 10 karakter</small>
-      </div>
+        <!-- FORM -->
+        <form method="POST">
 
-      <div class="mb-3">
-        <label class="form-label">Persentase Margin (%) <span class="text-danger">*</span></label>
-        <input type="number" step="0.01" name="persen" class="form-control" 
-               placeholder="Contoh: 15.5" 
-               value="<?= isset($_POST['persen']) ? htmlspecialchars($_POST['persen']) : '' ?>"
-               required min="0" max="100">
-        <small class="text-muted">Margin baru akan otomatis diset sebagai margin aktif</small>
-      </div>
+            <div class="form-group">
+                <label>ID Margin <span class="required">*</span></label>
+                <input 
+                    type="text" 
+                    name="idmargin" 
+                    placeholder="Contoh: M004"
+                    maxlength="10"
+                    value="<?= isset($_POST['idmargin']) ? htmlspecialchars($_POST['idmargin']) : '' ?>"
+                    required
+                >
+                <div class="form-hint">Format: M001, M002, M003, dst.</div>
+            </div>
 
-      <button type="submit" class="btn btn-primary w-100">💾 Simpan</button>
-      <a href="list.php" class="btn btn-secondary w-100 mt-2">✖️ Kembali</a>
+            <div class="form-group">
+                <label>Persentase Margin (%) <span class="required">*</span></label>
+                <input 
+                    type="number"
+                    name="persen"
+                    placeholder="Contoh: 15.5"
+                    step="0.01"
+                    min="0"
+                    max="100"
+                    value="<?= isset($_POST['persen']) ? htmlspecialchars($_POST['persen']) : '' ?>"
+                    required
+                >
+                <div class="form-hint">Margin baru otomatis diset sebagai margin aktif</div>
+            </div>
 
-    </form>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check2-circle"></i> Simpan Data
+                </button>
 
-  </div>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='list.php'">
+                    <i class="bi bi-x-circle"></i> Batal
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
 
 </body>

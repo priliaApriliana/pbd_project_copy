@@ -717,3 +717,12 @@ body {
 .container-fluid {
   padding-top: 15px;
 }
+
+/* Samakan tinggi semua stats cards */
+.stat-card {
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+

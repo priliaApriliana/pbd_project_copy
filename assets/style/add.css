@@ -1,155 +1,259 @@
-/* ==== TAMBAH BARANG – DESAIN BARU & CANTIK ==== */
+:root {
+    --green: #28a745;
+    --green-dark: #1e7e34;
+    --green-light: #d4edda;
+    --gray: #6c757d;
+    --light: #f8fff9;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', sans-serif !important;
+    background: linear-gradient(135deg, #f8fff9 0%, #e8f7ea 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+/* MAIN CONTENT */
+.main-content {
+    margin-left: 260px;
+    padding: 2.5rem 2rem;
     min-height: 100vh;
 }
 
-.main-content {
-    margin-left: 280px; /* sesuaikan dengan lebar sidebar kamu */
-    padding: 30px 20px;
-    transition: all 0.3s;
-}
-
-.container {
-    max-width: 700px;
+/* FORM WRAPPER */
+.form-container {
+    max-width: 680px;
     margin: 0 auto;
+    background: white;
+    border-radius: 24px;
+    padding: 2.8rem;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    border: 1px solid #e8f5e8;
 }
 
-/* Header */
-.header {
+/* HEADER */
+.form-header {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 3px solid #20c997;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 3px solid var(--green);
 }
 
 .header-icon {
-    background: #20c997;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
     color: white;
-    width: 60px;
-    height: 60px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
-    margin-right: 20px;
-    box-shadow: 0 4px 10px rgba(32, 201, 151, 0.3);
+    font-size: 2rem;
+    box-shadow: 0 10px 25px rgba(40,167,69,0.4);
 }
 
-.header h1 {
-    font-size: 28px;
-    font-weight: 700;
-    color: #2c3e50;
-    margin: 0;
+.form-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--green-dark);
 }
 
-/* Alert */
-.alert-danger {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 25px;
+.form-header p {
+    color: var(--gray);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* ALERT */
+.alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    border-radius: 16px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.8rem;
     font-weight: 500;
-}
-
-/* Form */
-.form-group {
-    margin-bottom: 22px;
-}
-
-.form-label {
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 8px;
-    font-size: 15px;
-}
-
-.form-control,
-.form-select {
-    border: 2px solid #ced4da;
-    border-radius: 10px;
-    padding: 12px 15px;
-    font-size: 15px;
-    transition: all 0.3s;
-}
-
-.form-control:focus,
-.form-select:focus {
-    border-color: #20c997;
-    box-shadow: 0 0 0 0.2rem rgba(32, 201, 151, 0.25);
-    outline: none;
-}
-
-/* Input ID Barang (readonly) */
-.readonly-input {
-    background-color: #e8f8f5 !important;
-    border: 2px solid #20c997 !important;
-    font-weight: 600;
-    color: #1a7d63;
-}
-
-.form-text {
-    color: #20c997 !important;
-    font-weight: 500;
-}
-
-/* Button */
-.button-group {
     display: flex;
-    gap: 15px;
-    margin-top: 35px;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+/* FORM INPUTS */
+.form-group {
+    margin-bottom: 1.8rem;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.6rem;
+}
+
+.required {
+    color: #ef4444;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 1rem;
+    background: #fbfbfb;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--green);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(40,167,69,0.15);
+}
+
+.form-hint {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+/* BUTTON GROUP */
+.btn-group {
+    display: flex;
+    gap: 1rem;
     justify-content: center;
+    margin-top: 2.5rem;
 }
 
 .btn {
-    padding: 12px 30px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 16px;
-    transition: all 0.3s;
+    padding: 0.9rem 2.2rem;
     border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1rem;
     cursor: pointer;
+    transition: all 0.4s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
 }
 
-.btn-success {
-    background: #20c997;
+.btn-primary {
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
     color: white;
+    box-shadow: 0 8px 25px rgba(40,167,69,0.4);
 }
 
-.btn-success:hover {
-    background: #1baa80;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(32, 201, 151, 0.3);
+.btn-primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(40,167,69,0.5);
 }
 
 .btn-secondary {
-    background: #6c757d;
-    color: white;
+    background: #e2e8f0;
+    color: #475569;
 }
 
 .btn-secondary:hover {
-    background: #5a6268;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+    background: #cbd5e1;
+    transform: translateY(-3px);
 }
 
-/* Responsif */
+/* RESPONSIVE */
 @media (max-width: 992px) {
-    .main-content {
-        margin-left: 0;
-        padding: 20px 15px;
-    }
-    .header {
-        flex-direction: column;
-        text-align: center;
-    }
-    .header-icon {
-        margin-right: 0;
-        margin-bottom: 15px;
-    }
+    .main-content { margin-left: 0; padding: 1.5rem; }
+    .form-header { flex-direction: column; text-align: center; }
+    .header-icon { margin-bottom: 1rem; }
 }
+
+/* Tambahan style untuk input password & select agar konsisten */
+input[type="password"],
+select {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 1rem;
+    background: #fbfbfb;
+    transition: all 0.3s ease;
+}
+
+input[type="password"]:focus,
+select:focus {
+    outline: none;
+    border-color: var(--green);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(40,167,69,0.15);
+}
+
+/* Supaya dropdown tidak kecil */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE2IDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTggN2wtNi02aDEyIiBmaWxsPSIjN2E4NzhiIi8+PC9zdmc+");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 12px;
+}
+
+/* --- FIX: Style khusus untuk input number --- */
+input[type="number"] {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 1rem;
+    background: #fbfbfb;
+    transition: all 0.3s ease;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--green);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(40,167,69,0.15);
+}
+
+/* =============================
+   FIX INPUT RUPIAH NUMPUK
+============================= */
+
+.input-rupiah-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: #f9fafb;
+    border: 1px solid #d8e0ea;
+    border-radius: 12px;
+    padding: 12px 15px;
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-rupiah-wrapper .prefix {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4a5568; /* abu elegan */
+}
+
+.input-rupiah-wrapper .input-rupiah {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    width: 100%;
+}
+
+.input-rupiah-wrapper .input-rupiah::placeholder {
+    color: #b9c0ca;
+}
+
+

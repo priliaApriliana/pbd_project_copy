@@ -1,153 +1,347 @@
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+$username = $_SESSION['user']['username'] ?? 'Admin';
+$role = $_SESSION['user']['role'] ?? 'Super Admin';
+?>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="/pbd_project_copy/assets/icons/bootstrap-icons.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Sidebar Container */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, #1e6b2a 0%, #2e7d32 100%);
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Custom Scrollbar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.5);
+}
+
+/* User Profile Section */
+.sidebar-profile {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding: 24px 20px;
+    margin: 20px 15px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.profile-avatar {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #fff, #e8f5e9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 32px;
+    color: #2e7d32;
+    border: 3px solid rgba(255,255,255,0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.profile-name {
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.profile-role {
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    display: inline-block;
+}
+
+/* Menu Section */
+.sidebar-menu {
+    padding: 10px 15px 30px;
+}
+
+.menu-section-title {
+    color: rgba(255,255,255,0.6);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 20px 15px 10px;
+    margin-top: 10px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    margin-bottom: 6px;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: white;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.menu-item:hover {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    transform: translateX(5px);
+}
+
+.menu-item:hover::before {
+    transform: scaleY(1);
+}
+
+.menu-item.active {
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.15));
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-left: 4px solid white;
+}
+
+.menu-item i {
+    font-size: 20px;
+    width: 28px;
+    margin-right: 14px;
+    text-align: center;
+}
+
+.menu-item span {
+    flex: 1;
+}
+
+/* Menu Icons Enhancement */
+.menu-item i.bi-speedometer2 { color: #fff59d; }
+.menu-item i.bi-person-badge { color: #a5d6a7; }
+.menu-item i.bi-people-fill { color: #90caf9; }
+.menu-item i.bi-building-fill-add { color: #ffcc80; }
+.menu-item i.bi-rulers { color: #ce93d8; }
+.menu-item i.bi-box-seam-fill { color: #80deea; }
+.menu-item i.bi-percent { color: #ffab91; }
+.menu-item i.bi-cart-check-fill { color: #f48fb1; }
+.menu-item i.bi-house-fill { color: #aed581; }
+.menu-item i.bi-receipt { color: #81d4fa; }
+.menu-item i.bi-arrow-return-left { color: #ffcc80; }
+.menu-item i.bi-layers-fill { color: #b39ddb; }
+
+/* Active state - reset icon color to white */
+.menu-item.active i {
+    color: white !important;
+}
+
+/* Logout Button */
+.menu-item.logout {
+    background: rgba(244,67,54,0.2);
+    border: 1px solid rgba(244,67,54,0.3);
+    color: #ffcdd2;
+    margin-top: 20px;
+}
+
+.menu-item.logout:hover {
+    background: #f44336;
+    color: white;
+    border-color: #f44336;
+}
+
+.menu-item.logout i {
+    color: #ffcdd2;
+}
+
+.menu-item.logout:hover i {
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.show {
+        transform: translateX(0);
+    }
+}
+
+/* Badge/Counter */
+.menu-badge {
+    background: #f44336;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-left: auto;
+}
+
+/* Divider */
+.menu-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    margin: 15px 15px;
+}
+</style>
+
+<!-- Sidebar HTML -->
 <div class="sidebar">
-  <div>
-    <div class="logo">
-      <!-- ICON SUPER ADMIN -->
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-           viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"
-           width="22" height="22" style="margin-right:6px;">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M12 2.25l8.25 4.5v10.5L12 21.75l-8.25-4.5V6.75L12 2.25z" />
-      </svg>
-      <span>Super Admin</span>
+    <!-- User Profile -->
+    <div class="sidebar-profile">
+        <div class="profile-avatar">
+            <i class="bi bi-person-circle"></i>
+        </div>
+        <div class="profile-name"><?= htmlspecialchars($username) ?></div>
+        <div class="profile-role"><?= htmlspecialchars($role) ?></div>
     </div>
-
-    <div class="menu">
-
-      <!-- DASHBOARD -->
-      <a href="/pbd_project_copy/views/dashboard.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5" />
-        </svg>
-        <span>Dashboard</span>
-      </a>
-
-      <h6>DATA MASTER</h6>
-
-      <!-- ROLE -->
-      <a href="/pbd_project_copy/views/role/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.118a7.5 7.5 0 0115 0A17.933 17.933 0 0112 21.75c-2.7 0-5.28-.57-7.5-1.632z"/>
-        </svg>
-        <span>Role</span>
-      </a>
-
-      <!-- USER -->
-      <a href="/pbd_project_copy/views/user/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M12 6a4 4 0 110 8 4 4 0 010-8zm0 10c-4.418 0-8 2.015-8 4.5V21h16v-.5c0-2.485-3.582-4.5-8-4.5z"/>
-        </svg>
-        <span>User</span>
-      </a>
-
-      <!-- VENDOR -->
-      <a href="/pbd_project_copy/views/vendor/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3.75 9l8.25-4.5 8.25 4.5m-16.5 0l8.25 4.5 8.25-4.5M3.75 9v6.75l8.25 4.5 8.25-4.5V9"/>
-        </svg>
-        <span>Vendor</span>
-      </a>
-
-      <!-- SATUAN -->
-      <a href="/pbd_project_copy/views/satuan/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M4.5 3.75h15m-15 4.5h15m-15 4.5h15m-15 4.5h15" />
-        </svg>
-        <span>Satuan</span>
-      </a>
-
-      <!-- BARANG -->
-      <a href="/pbd_project_copy/views/barang/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M21 7.5V18a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18V7.5h18zM3 7.5L12 3l9 4.5"/>
-        </svg>
-        <span>Barang</span>
-      </a>
-
-      <!-- MARGIN PENJUALAN -->
-      <a href="/pbd_project_copy/views/margin_penjualan/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3 3v18m0 0h18M3 12h18M3 6h18M3 18h10" />
-        </svg>
-        <span>Margin Penjualan</span>
-      </a>
-
-      <h6>TRANSAKSI</h6>
-
-      <!-- PENGADAAN -->
-      <a href="/pbd_project_copy/views/pengadaan/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M4.5 4.5h15v12h-15zM4.5 4.5L12 9l7.5-4.5" />
-        </svg>
-        <span>Pengadaan</span>
-      </a>
-
-      <!-- PENERIMAAN -->
-      <a href="/pbd_project_copy/views/penerimaan/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3 7.5l9-4.5 9 4.5v9.75A2.25 2.25 0 0118.75 21H5.25A2.25 2.25 0 013 19.25V7.5z" />
-        </svg>
-        <span>Penerimaan</span>
-      </a>
-
-      <!-- PENJUALAN -->
-      <a href="/pbd_project_copy/views/penjualan/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M7.5 7.5h9m-9 4.5h9m-9 4.5H12" />
-        </svg>
-        <span>Penjualan</span>
-      </a>
-
-      <!-- RETUR -->
-      <a href="/pbd_project_copy/views/retur/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3 9l6-6m0 0l6 6m-6-6v12a6 6 0 006 6h3" />
-        </svg>
-        <span>Retur</span>
-      </a>
-
-      <!-- KARTU STOK -->
-      <a href="/pbd_project_copy/views/kartu_stok/list.php">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-             viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3 6h18M3 12h18M3 18h18" />
-        </svg>
-        <span>Kartu Stok</span>
-      </a>
-
+    
+    <!-- Menu -->
+    <div class="sidebar-menu">
+        <!-- Dashboard -->
+        <a href="/pbd_project_copy/views/dashboard.php" class="menu-item <?= $current_page === 'dashboard.php' ? 'active' : '' ?>">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </a>
+        
+        <div class="menu-divider"></div>
+        
+        <!-- Data Master Section -->
+        <div class="menu-section-title">Data Master</div>
+        
+        <a href="/pbd_project_copy/views/role/list.php" class="menu-item <?= $current_page === 'role/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-person-badge"></i>
+            <span>Role</span>
+        </a>
+        
+        <a href="/pbd_project_copy/views/user/list.php" class="menu-item <?= $current_page === 'user/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-people-fill"></i>
+            <span>User</span>
+        </a>
+        
+        <a href="/pbd_project_copy/views/vendor/list.php" class="menu-item <?= $current_page === 'vendor/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-building-fill-add"></i>
+            <span>Vendor</span>
+        </a>
+        
+        <a href="/pbd_project_copy/views/satuan/list.php" class="menu-item <?= $current_page === 'satuan/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-rulers"></i>
+            <span>Satuan</span>
+        </a>
+        
+        <a href="/pbd_project_copy/views/barang/list.php" class="menu-item <?= $current_page === 'barang/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-box-seam-fill"></i>
+            <span>Barang</span>
+        </a>
+        
+        <a href="/pbd_project_copy/views/margin_penjualan/list.php" class="menu-item <?= $current_page === 'margin_penjualan/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-percent"></i>
+            <span>Margin Penjualan</span>
+        </a>
+        
+        <div class="menu-divider"></div>
+        
+        <!-- Transaksi Section -->
+        <div class="menu-section-title">Transaksi</div>
+        
+        <a href="/pbd_project_copy/views/pengadaan/list.php" class="menu-item <?= $current_page === 'pengadaan/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-cart-check-fill"></i>
+            <span>Pengadaan</span>
+        </a>
+        
+        <a href="/pbd_project_copy/views/penerimaan/list.php" class="menu-item <?= $current_page === 'penerimaan/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-house-fill"></i>
+            <span>Penerimaan</span>
+        </a>
+        
+        <a href="/pbd_project_copy/views/penjualan/list.php" class="menu-item <?= $current_page === 'penjualan/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-receipt"></i>
+            <span>Penjualan</span>
+        </a>
+        
+        <a href="/pbd_project_copy/views/retur/list.php" class="menu-item <?= $current_page === 'retur/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-arrow-return-left"></i>
+            <span>Retur</span>
+        </a>
+        
+        <a href="/pbd_project_copy/views/kartu_stok/list.php" class="menu-item <?= $current_page === 'kartu_stok/list.php' ? 'active' : '' ?>">
+            <i class="bi bi-layers-fill"></i>
+            <span>Kartu Stok</span>
+        </a>
+        
+        <div class="menu-divider"></div>
+        
+        <!-- Logout -->
+        <a href="../../scripts/logout.php" class="menu-item logout" onclick="return confirm('Yakin ingin logout?')">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+        </a>
     </div>
-  </div>
-
-  <div class="logout-section">
-    <a href="/pbd_project_copy/scripts/logout.php" class="logout-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="1.8"
-           viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3 3m0 0l-3 3m3-3H3" />
-      </svg>
-      <span>Logout</span>
-    </a>
-  </div>
 </div>
+
+<script>
+// Highlight active menu based on current URL
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPath = window.location.pathname;
+    const menuItems = document.querySelectorAll('.menu-item');
+    
+    menuItems.forEach(item => {
+        const href = item.getAttribute('href');
+        if (href && currentPath.includes(href.split('/').pop())) {
+            item.classList.add('active');
+        }
+    });
+});
+
+// Mobile toggle (optional)
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('show');
+}
+</script>
