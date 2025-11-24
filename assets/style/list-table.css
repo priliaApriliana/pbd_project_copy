@@ -111,14 +111,14 @@
     text-transform: uppercase;
     font-size: 13px;
     letter-spacing: 0.5px;
-    border: none;
+    border: 1px solid #c8e6c9;
     padding: 15px 12px;
 }
 
 .table tbody tr {
     background: white;
     transition: all 0.3s;
-    border-bottom: 1px solid #f0f0f0;
+    border: 1px solid #e0e0e0;
 }
 
 .table tbody tr:hover {
@@ -130,6 +130,7 @@
 .table tbody td {
     padding: 15px 12px;
     vertical-align: middle;
+    border: 1px solid #e0e0e0;
 }
 
 /* Status Badge */
@@ -151,51 +152,74 @@
     color: #c62828;
 }
 
+/* Warna status Pending */
+.status.pending {
+    background: #FFE8C2;     /* soft orange */
+    color: #C46A00;          /* strong orange */
+    border: 1px solid #FFC78A;
+}
+
+/* Status Revisi – Biru */
+.status.revisi {
+    background: #E3F2FD;     /* biru muda lembut */
+    color: #1565C0;          /* biru gelap elegan */
+    border: 1px solid #90CAF9;
+}
+
 /* Action Buttons */
 .action-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 15px;
+    font-size: 14px;
     text-decoration: none;
     transition: all 0.3s;
     border: none;
 }
 
-.btn-edit {
-    background: #fff8e1;
-    color: #f57c00;
-}
-
-.btn-edit:hover { 
-    background: #ffca28; 
-    color: white;
-    transform: scale(1.1);
-}
-
-.btn-delete {
-    background: #ffebee;
-    color: #d32f2f;
-}
-
-.btn-delete:hover { 
-    background: #ef5350; 
-    color: white;
-    transform: scale(1.1);
-}
-
 .btn-view {
     background: #e3f2fd;
     color: #1976d2;
+    border: 1px solid #bbdefb;
 }
 
 .btn-view:hover {
     background: #2196f3;
     color: white;
-    transform: scale(1.1);
+    border-color: #2196f3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.btn-edit {
+    background: #fff8e1;
+    color: #f57c00;
+    border: 1px solid #ffe0b2;
+}
+
+.btn-edit:hover { 
+    background: #ffb300; 
+    color: white;
+    border-color: #ffb300;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 179, 0, 0.3);
+}
+
+.btn-delete {
+    background: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+}
+
+.btn-delete:hover { 
+    background: #e53935; 
+    color: white;
+    border-color: #e53935;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
 }
 
 /* Empty State */

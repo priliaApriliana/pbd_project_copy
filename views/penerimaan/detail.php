@@ -9,7 +9,6 @@ require_once(__DIR__ . "/../../config/DBConnection.php");
 $db = new DBConnection();
 $conn = $db->getConnection();
 
-// Ambil ID dari parameter
 $id = $_GET['id'] ?? '';
 
 if (empty($id)) {
@@ -17,7 +16,7 @@ if (empty($id)) {
     exit();
 }
 
-// Ambil data penerimaan utama
+// Ambil data penerimaan
 $stmt = $conn->prepare("CALL sp_get_penerimaan_by_id(?)");
 $stmt->bind_param("i", $id);
 $stmt->execute();
@@ -54,202 +53,177 @@ foreach ($details as $d) {
   <meta charset="UTF-8">
   <title>Detail Penerimaan Barang</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Bootstrap + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
-  <!-- Custom CSS -->
+  <!-- Tema -->
   <link rel="stylesheet" href="../../assets/style/dashboard.css">
-  <link rel="stylesheet" href="../../assets/style/detail.css">
+  <link rel="stylesheet" href="../../assets/style/list-table.css">
+
+  <style>
+    .card-header-custom {
+      background: #1f8f40;
+      color: white;
+      font-weight: 600;
+      padding: 15px 20px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    .section-title {
+      background: #0d6efd;
+      color: white;
+      padding: 14px 20px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .btn-print {
+      background: #0d6efd;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .btn-print:hover {
+      background: #0b5cd6;
+      color: white;
+    }
+  </style>
+
 </head>
 
 <body>
 
 <?php include(__DIR__ . '/../layout/sidebar.php'); ?>
 
-<div class="container-fluid py-4" style="margin-left:260px; padding-right: 30px;">
+<div class="main">
+  <div class="container-fluid">
 
-  <!-- Tombol Kembali -->
-  <div class="mb-3">
-    <a href="list.php" class="btn btn-secondary btn-sm">
-      <i class="bi bi-arrow-left"></i> Kembali ke Daftar
-    </a>
-  </div>
-
-  <!-- CARD INFORMASI PENERIMAAN -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-header bg-success text-white">
-      <h5 class="mb-0"><i class="bi bi-box-seam"></i> Informasi Penerimaan</h5>
+    <!-- Tombol Kembali -->
+    <div class="mb-3">
+      <a href="list.php" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Kembali ke Daftar
+      </a>
     </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-6">
-          <table class="table table-borderless">
-            <tr>
-              <td width="200" class="fw-bold">Kode Penerimaan:</td>
-              <td><?= htmlspecialchars($penerimaan['kode_penerimaan']) ?></td>
-            </tr>
-            <tr>
-              <td class="fw-bold">Kode Pengadaan:</td>
-              <td><?= htmlspecialchars($penerimaan['kode_pengadaan']) ?></td>
-            </tr>
-            <tr>
-              <td class="fw-bold">Vendor:</td>
-              <td><?= htmlspecialchars($penerimaan['vendor']) ?></td>
-            </tr>
-            <tr>
-              <td class="fw-bold">Petugas:</td>
-              <td><?= htmlspecialchars($penerimaan['petugas']) ?></td>
-            </tr>
-          </table>
+
+    <!-- INFORMASI PENERIMAAN -->
+    <div class="card mb-4 shadow-sm rounded-4">
+      <div class="card-header-custom">
+        <i class="bi bi-box-seam"></i> Informasi Penerimaan
+      </div>
+
+      <div class="card-body">
+
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table-borderless">
+              <tr>
+                <td class="fw-bold" width="200">Kode Penerimaan:</td>
+                <td><?= $penerimaan['kode_penerimaan'] ?></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Kode Pengadaan:</td>
+                <td><?= $penerimaan['kode_pengadaan'] ?></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Vendor:</td>
+                <td><?= $penerimaan['vendor'] ?></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Petugas:</td>
+                <td><?= $penerimaan['petugas'] ?></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="col-md-6">
+            <table class="table table-borderless">
+              <tr>
+                <td class="fw-bold">Tanggal Penerimaan:</td>
+                <td><?= date('d-m-Y H:i', strtotime($penerimaan['tanggal_penerimaan'])) ?></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Status:</td>
+                <td>
+                  <?php
+                    switch ($penerimaan['status']) {
+                      case 'P': echo '<span class="status pending">Sebagian Diterima</span>'; break;
+                      case 'S': echo '<span class="status aktif">Selesai</span>'; break;
+                      case 'R': echo '<span class="status revisi">Revisi</span>'; break;
+                      case 'C': echo '<span class="status nonaktif">Batal</span>'; break;
+                    }
+                  ?>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
-        
-        <div class="col-md-6">
-          <table class="table table-borderless">
-            <tr>
-              <td width="200" class="fw-bold">Tanggal Penerimaan:</td>
-              <td><?= date('d-m-Y H:i', strtotime($penerimaan['tanggal_penerimaan'])) ?></td>
-            </tr>
-            <tr>
-              <td class="fw-bold">Status:</td>
-              <td>
-                <?php
-                  switch ($penerimaan['status']) {
-                      case 'P': echo '<span class="badge bg-warning text-dark">Pending</span>'; break;
-                      case 'S': echo '<span class="badge bg-success">Selesai</span>'; break;
-                      case 'R': echo '<span class="badge bg-danger">Revisi</span>'; break;
-                      case 'C': echo '<span class="badge bg-secondary">Batal</span>'; break;
-                      default: echo '<span class="badge bg-light text-dark">Tidak Diketahui</span>';
-                  }
-                ?>
-              </td>
-            </tr>
-          </table>
-        </div>
+
       </div>
     </div>
-  </div>
 
-  <!-- CARD DETAIL BARANG -->
-  <div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-      <h5 class="mb-0"><i class="bi bi-list-ul"></i> Detail Barang Diterima</h5>
-    </div>
-    <div class="card-body p-0">
-      
-      <?php if (!empty($details)): ?>
+    <!-- DETAIL BARANG DITERIMA -->
+    <div class="card shadow-sm rounded-4 mb-4">
+      <div class="section-title">
+        <i class="bi bi-list-ul"></i> Detail Barang Diterima
+      </div>
+
+      <div class="card-body p-0">
         <div class="table-responsive">
-          <table class="table table-hover table-striped align-middle mb-0">
+
+          <table class="table table-bordered table-hover align-middle mb-0">
             <thead class="table-light text-center">
               <tr>
-                <th width="60">No</th>
+                <th>No</th>
                 <th>Nama Barang</th>
-                <th width="100">Satuan</th>
-                <th width="100">Jumlah</th>
-                <th width="150">Harga Satuan</th>
-                <th width="180">Subtotal</th>
+                <th>Satuan</th>
+                <th>Jumlah</th>
+                <th>Harga Satuan</th>
+                <th>Subtotal</th>
               </tr>
             </thead>
 
             <tbody>
-              <?php $no = 1; ?>
-              <?php foreach ($details as $d): ?>
-                <tr>
-                  <td class="text-center"><?= $no++ ?></td>
-                  <td><?= htmlspecialchars($d['nama_barang']) ?></td>
-                  <td class="text-center"><?= htmlspecialchars($d['nama_satuan']) ?></td>
-                  <td class="text-end"><?= number_format($d['jumlah_terima'], 0, ',', '.') ?></td>
-                  <td class="text-end">Rp <?= number_format($d['harga_satuan_terima'], 0, ',', '.') ?></td>
-                  <td class="text-end fw-bold">Rp <?= number_format($d['sub_total_terima'], 0, ',', '.') ?></td>
-                </tr>
+              <?php $no = 1; foreach ($details as $d): ?>
+              <tr>
+                <td class="text-center"><?= $no++ ?></td>
+                <td><?= $d['nama_barang'] ?></td>
+                <td class="text-center"><?= $d['nama_satuan'] ?></td>
+                <td class="text-end"><?= number_format($d['jumlah_terima']) ?></td>
+                <td class="text-end">Rp <?= number_format($d['harga_satuan_terima']) ?></td>
+                <td class="text-end fw-bold">Rp <?= number_format($d['sub_total_terima']) ?></td>
+              </tr>
               <?php endforeach; ?>
             </tbody>
 
             <tfoot class="table-light">
               <tr>
                 <td colspan="5" class="text-end fw-bold">TOTAL:</td>
-                <td class="text-end fw-bold text-success fs-5">
-                  Rp <?= number_format($total, 0, ',', '.') ?>
-                </td>
+                <td class="text-end text-success fw-bold fs-5">Rp <?= number_format($total) ?></td>
               </tr>
             </tfoot>
+
           </table>
-        </div>
 
-      <?php else: ?>
-        <div class="alert alert-warning text-center">
-          <i class="bi bi-exclamation-triangle"></i> Tidak ada detail barang untuk penerimaan ini.
         </div>
-      <?php endif; ?>
-
+      </div>
     </div>
-  </div>
 
-  <!-- TOMBOL AKSI -->
-  <div class="mt-4 d-flex justify-content-between">
-    <a href="list.php" class="btn btn-secondary">
-      <i class="bi bi-arrow-left"></i> Kembali
-    </a>
-    
-    <div>
-      <a href="edit.php?id=<?= htmlspecialchars($penerimaan['kode_penerimaan']) ?>" 
-         class="btn btn-warning me-2">
-        <i class="bi bi-pencil"></i> Edit
-      </a>
-      
-      <button class="btn btn-primary" onclick="window.print()">
+    <!-- TOMBOL CETAK -->
+    <div class="d-flex justify-content-end mt-3">
+      <button onclick="window.print()" class="btn-print">
         <i class="bi bi-printer"></i> Cetak
       </button>
     </div>
-  </div>
 
+  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Custom CSS untuk Fix Layout -->
-<style>
-/* Fix container agar tidak terpotong */
-body {
-  overflow-x: hidden;
-}
-
-.container-fluid {
-  max-width: calc(100vw - 290px);
-}
-
-/* Table responsive */
-.table-responsive {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.table {
-  min-width: 100%;
-  white-space: nowrap;
-}
-
-/* Print Styling */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  .card, .card * {
-    visibility: visible;
-  }
-  .card {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-  }
-  .btn, .sidebar {
-    display: none !important;
-  }
-}
-</style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

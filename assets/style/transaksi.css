@@ -1,0 +1,225 @@
+:root {
+    --green: #28a745;
+    --green-dark: #1e7e34;
+    --green-light: #d4edda;
+    --gray: #6c757d;
+    --light: #f8fff9;
+    --danger: #dc3545;
+    --warning: #ffc107;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background: linear-gradient(135deg, #f8fff9 0%, #e8f7ea 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.main-content {
+    margin-left: 260px;
+    padding: 2.5rem 2rem;
+}
+
+.page-header {
+    background: white;
+    padding: 2rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-header h2 {
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--green-dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+select.form-select {
+    padding: 0.75rem 1rem;
+    border-radius: 16px;
+    border: 2px solid #e2e8f0;
+    font-size: 0.95rem;
+    min-width: 180px;
+}
+
+select.form-select:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px rgba(40,167,69,0.15);
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-success {
+    background: var(--green);
+    color: white;
+    border: none;
+    box-shadow: 0 8px 20px rgba(40,167,69,0.3);
+}
+
+.btn-success:hover {
+    background: var(--green-dark);
+    transform: translateY(-3px);
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+    border: none;
+    box-shadow: 0 8px 20px rgba(0,123,255,0.3);
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    transform: translateY(-3px);
+}
+
+.table-card {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    border: 1px solid #e8f5e8;
+}
+
+table {
+    margin: 0;
+    width: 100%;
+}
+
+thead {
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    color: white;
+}
+
+th {
+    font-weight: 600;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+td {
+    padding: 1rem;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+tbody tr {
+    transition: all 0.3s ease;
+}
+
+tbody tr:hover {
+    background: #f8fff9;
+    transform: scale(1.01);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.badge-success { background: #d4edda; color: #155724; }
+.badge-warning { background: #fff3cd; color: #856404; }
+.badge-danger { background: #f8d7da; color: #721c24; }
+.badge-secondary { background: #e2e3e5; color: #383d41; }
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 12px;
+}
+
+.btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    background: #007bff;
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.text-end { text-align: right; }
+.text-center { text-align: center; }
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--gray);
+    font-style: italic;
+}
+
+@media (max-width: 992px) {
+    .main-content { margin-left: 0; padding: 1.5rem; }
+    .page-header { flex-direction: column; text-align: center; }
+    .header-actions { justify-content: center; width: 100%; }
+    table { font-size: 0.9rem; }
+    th, td { padding: 0.8rem 0.5rem; }
+}
+
+/* Lebarkan kolom STATUS pada tabel pengadaan */
+.table-status-col {
+    min-width: 150px !important;   /* atur sesuai kebutuhan, bisa 160-180px */
+    text-align: center;
+}
+
+/* Garis tabel modern */
+.table-bordered-custom {
+    border-collapse: collapse;
+}
+
+.table-bordered-custom th,
+.table-bordered-custom td {
+    border: 1px solid #d1e7dd !important; /* hijau muda */
+}
+
+/* Garis di header lebih tebal */
+.table-bordered-custom thead th {
+    border: 2px solid #1e7e34 !important;
+}

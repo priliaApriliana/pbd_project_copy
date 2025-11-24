@@ -17,16 +17,13 @@ $stmt->bind_param("s", $status);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
-  // Filter manual sesuai dropdown
-  if ($status === 'proses') {
-    $data = array_filter($data, function($row) {
-        return $row['status'] === 'P';
-    });
-  } elseif ($status === 'selesai') {
-    $data = array_filter($data, function($row) {
-        return $row['status'] === 'S';
-    });
-  }
+
+// Filter manual
+if ($status === 'proses') {
+    $data = array_filter($data, fn($row) => $row['status'] === 'P');
+} elseif ($status === 'selesai') {
+    $data = array_filter($data, fn($row) => $row['status'] === 'S');
+}
 
 $stmt->close();
 $conn->next_result();
@@ -38,122 +35,129 @@ $conn->next_result();
   <meta charset="UTF-8">
   <title>Daftar Penerimaan Barang</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Custom -->
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="../../assets/style/dashboard.css">
-  <link rel="stylesheet" href="../../assets/style/table.css">
+  <link rel="stylesheet" href="../../assets/style/list-table.css">
 </head>
 
 <body>
 
 <?php include(__DIR__ . '/../layout/sidebar.php'); ?>
 
-<div class="container py-4" style="margin-left:260px;">
+<div class="main">
+  <div class="container-fluid">
 
-  <div class="card p-4 shadow-sm">
+    <!-- HEADER -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+      <h1 class="page-title">
+        <img src="https://cdn-icons-png.flaticon.com/512/679/679720.png" width="42">
+        Daftar Penerimaan Barang
+      </h1>
 
-    <!-- Judul + Tombol Tambah -->
-    <h4 class="fw-bold mb-3">📦 Daftar Penerimaan Barang</h4>
+      <div class="d-flex gap-3">
 
-    <!-- Tombol Notifikasi -->
-    <?php if(isset($_SESSION['success_message'])): ?>
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <?= $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <!-- FILTER STATUS -->
+        <div class="dropdown">
+          <button class="btn btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-funnel"></i>
+            <?= $status == 'all' ? 'Semua' : ($status == 'proses' ? 'Sebagian Diterima' : 'Selesai') ?>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item <?= $status=='all'?'active':'' ?>" href="?status=all">Semua</a></li>
+            <li><a class="dropdown-item <?= $status=='proses'?'active':'' ?>" href="?status=proses">Sebagian Diterima</a></li>
+            <li><a class="dropdown-item <?= $status=='selesai'?'active':'' ?>" href="?status=selesai">Selesai</a></li>
+          </ul>
+        </div>
+
       </div>
-    <?php endif; ?>
+    </div>
 
-    <?php if(isset($_SESSION['error_message'])): ?>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <?= $_SESSION['error_message']; unset($_SESSION['error_message']); ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <!-- TOMBOL TAMBAH -->
+    <div class="mb-4">
+      <a href="add.php" class="btn-add">
+        <i class="bi bi-plus-circle-fill"></i> Tambah Penerimaan
+      </a>
+    </div>
+
+    <!-- CARD TABLE -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bi bi-box-seam me-2"></i> Daftar Penerimaan</h5>
+        <span class="badge bg-light text-dark fs-6"><?= count($data) ?> item</span>
       </div>
-    <?php endif; ?>
 
-    <!-- FILTER STATUS + ADD BUTTON -->
-    <form method="get" class="mb-3 position-relative">
-      <label class="fw-bold me-2">Filter Status:</label>
-      <select name="status" class="form-select w-auto d-inline">
-      <option value="all"      <?= $status == 'all' ? 'selected' : '' ?>>Semua</option>
-      <option value="proses"   <?= $status == 'proses' ? 'selected' : '' ?>>Sebagian Diterima</option>
-      <option value="selesai"  <?= $status == 'selesai' ? 'selected' : '' ?>>Selesai</option>
-      </select>
+      <div class="card-body p-0">
+        <div class="table-responsive">
 
-      <button class="btn btn-success btn-sm ms-2">Tampilkan</button>
+          <table class="table table-hover table-bordered align-middle mb-0">
+            <thead>
+              <tr>
+                <th>PENERIMAAN</th>
+                <th>PENGADAAN</th>
+                <th>VENDOR</th>
+                <th>PETUGAS</th>
+                <th>STATUS</th>
+                <th>TANGGAL</th>
+                <th class="text-center">AKSI</th>
+              </tr>
+            </thead>
 
-      <!-- Tombol di kanan -->
-      <a href="add.php" class="btn btn-primary btn-sm float-end">+ Tambah Penerimaan</a>
-    </form>
+            <tbody>
+              <?php if (!empty($data)): ?>
+                <?php foreach ($data as $row): ?>
+                  <tr>
 
-    <!-- TABLE UTAMA -->
-    <table class="table table-bordered align-middle">
-      <thead class="table-success text-center">
-        <tr>
-          <th>Penerimaan</th>
-          <th>Pengadaan</th>
-          <th>Vendor</th>
-          <th>Petugas</th>
-          <th>Status</th>
-          <th>Tanggal</th>
-          <th>Detail</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
+                    <td><strong class="text-success"><?= $row['kode_penerimaan'] ?></strong></td>
+                    <td><?= $row['kode_pengadaan'] ?></td>
+                    <td><?= $row['vendor'] ?></td>
+                    <td><?= $row['petugas'] ?></td>
 
-      <tbody>
-        <?php if (!empty($data)): ?>
-          <?php foreach ($data as $row): ?>
-            <tr>
-              <td class="text-center"><?= $row['kode_penerimaan'] ?></td>
-              <td class="text-center"><?= $row['kode_pengadaan'] ?></td>
-              <td><?= $row['vendor'] ?></td>
-              <td><?= $row['petugas'] ?></td>
+                    <td>
+                      <?php
+                      switch ($row['status']) {
+                        case 'P': echo '<span class="status pending">Sebagian Diterima</span>'; break;
+                        case 'S': echo '<span class="status aktif">Selesai</span>'; break;
+                        case 'R': echo '<span class="status revisi">Revisi</span>'; break;
+                        case 'C': echo '<span class="status nonaktif">Batal</span>'; break;
+                      }
+                      ?>
+                    </td>
 
-              <td class="text-center">
-                <?php
-                  switch ($row['status']) {
-                      case 'P': echo '<span class="badge bg-warning text-dark">Sebagian Diterima</span>'; break;
-                      case 'S': echo '<span class="badge bg-success">Selesai</span>'; break;
-                      case 'R': echo '<span class="badge bg-danger">Revisi</span>'; break;
-                      case 'C': echo '<span class="badge bg-secondary">Batal</span>'; break;
-                      default: echo '<span class="badge bg-light text-dark">Tidak Diketahui</span>';
-                  }
-                ?>
-              </td>
+                    <td><?= $row['tanggal_penerimaan'] ?></td>
 
-              <td class="text-center"><?= $row['tanggal_penerimaan'] ?></td>
+                    <td class="text-center">
+                      <a href="detail.php?id=<?= $row['kode_penerimaan'] ?>" class="action-btn btn-view">
+                        <i class="bi bi-eye-fill"></i>
+                      </a>
+                    </td>
 
-              <td class="text-center">
-                <!-- 🔥 UBAH DI SINI: Link ke detail.php -->
-                <a href="detail.php?id=<?= $row['kode_penerimaan'] ?>"
-                   class="btn btn-outline-primary btn-sm">Lihat</a>
-              </td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="7" class="text-center py-4 text-muted">
+                    <i class="bi bi-inbox fs-1"></i><br>
+                    Belum ada data penerimaan.
+                  </td>
+                </tr>
+              <?php endif; ?>
+            </tbody>
 
-              <td class="text-center">
-                <a href="edit.php?id=<?= $row['kode_penerimaan'] ?>"
-                   class="btn btn-warning btn-sm">Edit</a>
+          </table>
 
-                <a href="delete.php?id=<?= $row['kode_penerimaan'] ?>"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
-              </td>
-            </tr>
-          <?php endforeach; ?>
-
-        <?php else: ?>
-          <tr><td colspan="8" class="text-center text-muted fst-italic">Belum ada data penerimaan.</td></tr>
-        <?php endif; ?>
-      </tbody>
-
-    </table>
+        </div>
+      </div>
+    </div>
 
   </div>
-
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
