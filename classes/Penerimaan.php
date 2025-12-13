@@ -9,7 +9,7 @@ class Penerimaan {
         $this->conn = $db->getConnection();
     }
 
-    // 1️⃣ Ambil semua data penerimaan
+    // Ambil semua data penerimaan
     public function getAllPenerimaan($status = 'all') {
         $stmt = $this->conn->prepare("CALL sp_get_penerimaan(?)");
         $stmt->bind_param("s", $status);
@@ -19,7 +19,7 @@ class Penerimaan {
     }
     
 
-    // 2️⃣ Ambil detail penerimaan (pakai SP)
+    // Ambil detail penerimaan (pakai SP)
     public function getDetailPenerimaan($idpenerimaan) {
         $details = [];
         $stmt = $this->conn->prepare("CALL sp_get_detail_penerimaan(?)");
@@ -34,7 +34,7 @@ class Penerimaan {
         return $details;
     }
 
-    // 3️⃣ Ambil daftar pengadaan untuk dropdown (pakai SP)
+    // Ambil daftar pengadaan untuk dropdown (pakai SP)
     public function getPengadaanDropdown() {
         $data = [];
         $result = $this->conn->query("CALL sp_get_pengadaan_dropdown()");
@@ -45,7 +45,7 @@ class Penerimaan {
         return $data;
     }
 
-    // 4️⃣ Ambil detail barang dari pengadaan (pakai SP)
+    // Ambil detail barang dari pengadaan (pakai SP)
     public function getDetailPengadaan($idpengadaan) {
         $data = [];
         $stmt = $this->conn->prepare("CALL sp_get_detail_pengadaan(?)");
@@ -60,7 +60,7 @@ class Penerimaan {
         return $data;
     }
 
-    // 5️⃣ Insert penerimaan baru (header)
+    // Insert penerimaan baru (header)
     public function insertPenerimaan($idpengadaan, $iduser) {
         $status = 'A';
         $stmt = $this->conn->prepare("INSERT INTO penerimaan (status, idpengadaan, iduser) VALUES (?, ?, ?)");
@@ -76,7 +76,7 @@ class Penerimaan {
         }
     }
 
-    // 6️⃣ Insert detail penerimaan (memicu trigger stok otomatis)
+    // Insert detail penerimaan (memicu trigger stok otomatis)
     public function insertDetailPenerimaan($idpenerimaan, $idbarang, $jumlah, $harga) {
         $stmt = $this->conn->prepare("
             INSERT INTO detail_penerimaan (idpenerimaan, barang_idbarang, jumlah_terima, harga_satuan_terima, sub_total_terima)
@@ -91,7 +91,7 @@ class Penerimaan {
         return true;
     }
 
-    // 7️⃣ Helper: Ambil data satu penerimaan + vendor + user (view)
+    // Helper: Ambil data satu penerimaan + vendor + user (view)
     
     public function getPenerimaanById($idpenerimaan) {
         $stmt = $this->conn->prepare("SELECT * FROM v_penerimaan_all WHERE idpenerimaan = ?");

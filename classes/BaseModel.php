@@ -9,6 +9,11 @@ class BaseModel {
         $this->conn = $db->getConnection();
     }
 
+     public function query(string $sql)
+    {
+        return $this->conn->query($sql);
+    }
+
     /**
      * Ambil semua data dari tabel tertentu
      * @param string $table — nama tabel

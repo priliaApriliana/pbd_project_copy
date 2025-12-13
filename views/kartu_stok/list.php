@@ -5,13 +5,12 @@ if (!isset($_SESSION['user']['logged_in']) || $_SESSION['user']['logged_in'] !==
   exit();
 }
 
-require_once(__DIR__ . '/../../config/DBConnection.php');
-$db = new DBConnection();
-$conn = $db->getConnection();
+require_once(__DIR__ . '/../../classes/KartuStok.php');
 
-$query = "SELECT * FROM v_kartu_stok_detail ORDER BY tanggal DESC";
-$result = $conn->query($query);
+$kartuStok = new KartuStok();
+$result = $kartuStok->getAllKartuStok();
 $data = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+
 ?>
 
 <!DOCTYPE html>
