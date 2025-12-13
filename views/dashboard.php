@@ -5,11 +5,32 @@ if (!isset($_SESSION['user']['logged_in']) || $_SESSION['user']['logged_in'] !==
     exit();
 }
 
-// Simulasi data (ganti dengan query database Anda)
+// 🔥 PBD: Gunakan Class untuk ambil data dari database
+require_once(__DIR__ . '/../classes/Pengadaan.php');
+require_once(__DIR__ . '/../classes/Penerimaan.php');
+require_once(__DIR__ . '/../classes/Penjualan.php');
+
+// Ambil data real dari database
+$pengadaanObj = new Pengadaan();
+$penerimaanObj = new Penerimaan();
+$penjualanObj = new Penjualan();
+
+// Hitung total per kategori
+$totalPengadaan = count($pengadaanObj->getAll('all'));
+$totalPenerimaan = count($penerimaanObj->getAllPenerimaan('all'));
+$totalPenjualan = count($penjualanObj->getAll());
+
+// Hitung total nilai (bisa pakai method khusus atau query VIEW)
+$pengadaanData = $pengadaanObj->getAll();
+$totalNilaiPengadaan = array_sum(array_column($pengadaanData, 'total_nilai'));
+
+$penjualanData = $penjualanObj->getAll();
+$totalNilaiPenjualan = array_sum(array_column($penjualanData, 'total'));
+
+// Data dummy untuk user, vendor, barang (atau buat class tersendiri)
 $totalUsers = 3;
 $totalVendors = 6;
 $totalBarang = 15;
-$totalRevenue = 325892000; // Rp 325.892.000
 
 $username = $_SESSION['user']['username'] ?? 'Admin';
 $role = $_SESSION['user']['role'] ?? 'Super Admin';
@@ -64,7 +85,7 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
         /* Stats Cards */
         .stats-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -78,6 +99,7 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         
         .stat-card:hover {
@@ -122,14 +144,24 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
             color: #7b1fa2;
         }
         
-        .stat-card.revenue .stat-icon {
+        .stat-card.pengadaan .stat-icon {
             background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
             color: #2e7d32;
         }
         
+        .stat-card.penerimaan .stat-icon {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            color: #1565c0;
+        }
+        
+        .stat-card.penjualan .stat-icon {
+            background: linear-gradient(135deg, #fff3e0, #ffcc80);
+            color: #ef6c00;
+        }
+        
         .stat-label {
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -138,9 +170,15 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
         
         .stat-value {
             color: #2e7d32;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
+        }
+        
+        .stat-subtitle {
+            color: #999;
+            font-size: 12px;
+            margin-top: 8px;
         }
         
         .stat-change {
@@ -149,59 +187,19 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
             font-weight: 600;
         }
         
-        .stat-change.negative {
-            color: #f44336;
-        }
-        
         .stat-change i {
             font-size: 12px;
         }
         
-        /* Chart Section */
-        .chart-section {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-        }
-        
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
-        .chart-title {
+        /* Section Title */
+        .section-title {
             color: #2e7d32;
             font-size: 20px;
             font-weight: 600;
-        }
-        
-        .chart-filter {
+            margin-bottom: 20px;
             display: flex;
+            align-items: center;
             gap: 10px;
-        }
-        
-        .filter-btn {
-            padding: 8px 16px;
-            border: 1px solid #e0e0e0;
-            background: white;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .filter-btn:hover,
-        .filter-btn.active {
-            background: #4caf50;
-            color: white;
-            border-color: #4caf50;
         }
         
         /* Quick Actions */
@@ -210,13 +208,7 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
             border-radius: 16px;
             padding: 24px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        
-        .quick-actions h5 {
-            color: #2e7d32;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 20px;
+            margin-top: 30px;
         }
         
         .action-grid {
@@ -264,13 +256,7 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
             }
             
             .stats-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .chart-header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
+                grid-template-columns: repeat(2, 1fr);
             }
             
             .action-grid {
@@ -283,8 +269,12 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
                 font-size: 24px;
             }
             
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
             .stat-value {
-                font-size: 28px;
+                font-size: 24px;
             }
             
             .action-grid {
@@ -308,103 +298,118 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
             <p class="page-subtitle">Ringkasan data keseluruhan sistem farmasi</p>
         </div>
         
-        <!-- Stats Cards -->
+        <!-- Section: Data Master -->
+        <h5 class="section-title">
+            <i class="bi bi-database-fill"></i>
+            Data Master
+        </h5>
+        
         <div class="stats-container">
             <!-- Total Users -->
-            <div class="stat-card users">
+            <div class="stat-card users" onclick="location.href='user/list.php'">
                 <div class="stat-icon">
                     <i class="bi bi-people-fill"></i>
                 </div>
                 <div class="stat-label">User Terdaftar</div>
                 <div class="stat-value"><?= number_format($totalUsers) ?></div>
-                <div class="stat-change">
-                    <i class="bi bi-arrow-up-short"></i> +12% dari bulan lalu
-                </div>
+                <div class="stat-subtitle">Klik untuk lihat detail</div>
             </div>
             
             <!-- Total Vendors -->
-            <div class="stat-card vendors">
+            <div class="stat-card vendors" onclick="location.href='vendor/list.php'">
                 <div class="stat-icon">
                     <i class="bi bi-building"></i>
                 </div>
                 <div class="stat-label">Vendor Aktif</div>
                 <div class="stat-value"><?= number_format($totalVendors) ?></div>
-                <div class="stat-change">
-                    <i class="bi bi-arrow-up-short"></i> +8% dari bulan lalu
-                </div>
+                <div class="stat-subtitle">Klik untuk lihat detail</div>
             </div>
             
             <!-- Total Products -->
-            <div class="stat-card products">
+            <div class="stat-card products" onclick="location.href='barang/list.php'">
                 <div class="stat-icon">
                     <i class="bi bi-box-seam"></i>
                 </div>
                 <div class="stat-label">Total Barang</div>
                 <div class="stat-value"><?= number_format($totalBarang) ?></div>
-                <div class="stat-change">
-                    <i class="bi bi-arrow-up-short"></i> +5% dari bulan lalu
-                </div>
-            </div>
-            
-            <!-- Total Revenue -->
-            <div class="stat-card revenue">
-                <div class="stat-icon">
-                    <i class="bi bi-cash-coin"></i>
-                </div>
-                <div class="stat-label">Total Pendapatan</div>
-                <div class="stat-value">Rp <?= number_format($totalRevenue / 1000000, 1) ?>Jt</div>
-                <div class="stat-change">
-                    <i class="bi bi-arrow-up-short"></i> +18% dari bulan lalu
-                </div>
+                <div class="stat-subtitle">Klik untuk lihat detail</div>
             </div>
         </div>
         
-        <!-- Chart Section -->
-        <div class="chart-section">
-            <div class="chart-header">
-                <h3 class="chart-title">
-                    <i class="bi bi-graph-up me-2"></i>Statistik Penjualan
-                </h3>
-                <div class="chart-filter">
-                    <button class="filter-btn active">7 Hari</button>
-                    <button class="filter-btn">30 Hari</button>
-                    <button class="filter-btn">12 Bulan</button>
+        <!-- Section: Transaksi -->
+        <h5 class="section-title mt-4">
+            <i class="bi bi-receipt-cutoff"></i>
+            Rekapitulasi Transaksi
+        </h5>
+        
+        <div class="stats-container">
+            <!-- Total Pengadaan -->
+            <div class="stat-card pengadaan" onclick="location.href='pengadaan/list.php'">
+                <div class="stat-icon">
+                    <i class="bi bi-cart-check-fill"></i>
+                </div>
+                <div class="stat-label">Total Pengadaan</div>
+                <div class="stat-value"><?= number_format($totalPengadaan) ?></div>
+                <div class="stat-subtitle">
+                    Total Nilai: <strong>Rp <?= number_format($totalNilaiPengadaan / 1000000, 1) ?>Jt</strong>
                 </div>
             </div>
-            <div style="text-align: center; padding: 60px 20px; color: #999;">
-                <i class="bi bi-bar-chart" style="font-size: 48px; color: #c8e6c9; margin-bottom: 15px;"></i>
-                <p>Grafik penjualan akan ditampilkan di sini</p>
-                <small>Integrasi dengan Chart.js atau library visualization lainnya</small>
+            
+            <!-- Total Penerimaan -->
+            <div class="stat-card penerimaan" onclick="location.href='penerimaan/list.php'">
+                <div class="stat-icon">
+                    <i class="bi bi-house-fill"></i>
+                </div>
+                <div class="stat-label">Total Penerimaan</div>
+                <div class="stat-value"><?= number_format($totalPenerimaan) ?></div>
+                <div class="stat-subtitle">
+                    Barang yang sudah diterima
+                </div>
+            </div>
+            
+            <!-- Total Penjualan -->
+            <div class="stat-card penjualan" onclick="location.href='penjualan/list.php'">
+                <div class="stat-icon">
+                    <i class="bi bi-cash-coin"></i>
+                </div>
+                <div class="stat-label">Total Penjualan</div>
+                <div class="stat-value"><?= number_format($totalPenjualan) ?></div>
+                <div class="stat-subtitle">
+                    Total Pendapatan: <strong>Rp <?= number_format($totalNilaiPenjualan / 1000000, 1) ?>Jt</strong>
+                </div>
             </div>
         </div>
         
         <!-- Quick Actions -->
         <div class="quick-actions">
-            <h5><i class="bi bi-lightning-fill me-2"></i>Aksi Cepat</h5>
+            <h5 class="section-title">
+                <i class="bi bi-lightning-fill"></i>
+                Aksi Cepat
+            </h5>
             <div class="action-grid">
-                <a href="views/barang/add.php" class="action-btn">
+                <a href="barang/add.php" class="action-btn">
                     <i class="bi bi-plus-circle-fill"></i>
                     <span>Tambah Barang</span>
                 </a>
-                <a href="views/vendor/add.php" class="action-btn">
+                <a href="vendor/add.php" class="action-btn">
                     <i class="bi bi-building-add"></i>
                     <span>Tambah Vendor</span>
                 </a>
-                <a href="views/pengadaan/add.php" class="action-btn">
+                <a href="pengadaan/add.php" class="action-btn">
                     <i class="bi bi-cart-plus"></i>
                     <span>Buat Pengadaan</span>
                 </a>
-                <a href="views/penjualan/add.php" class="action-btn">
+                <a href="penerimaan/add.php" class="action-btn">
+                    <i class="bi bi-inbox"></i>
+                    <span>Terima Barang</span>
+                </a>
+                <a href="penjualan/add.php" class="action-btn">
                     <i class="bi bi-cash-stack"></i>
                     <span>Transaksi Baru</span>
                 </a>
-                <a href="views/user/list.php" class="action-btn">
-                    <i class="bi bi-people"></i>
-                    <span>Kelola User</span>
-                </a>
-                <a href="views/barang/list.php" class="action-btn">
-                    <i class="bi bi-box-seam"></i>
-                    <span>Lihat Stok</span>
+                <a href="kartu_stok/list.php" class="action-btn">
+                    <i class="bi bi-layers-fill"></i>
+                    <span>Kartu Stok</span>
                 </a>
             </div>
         </div>
@@ -414,17 +419,5 @@ $role = $_SESSION['user']['role'] ?? 'Super Admin';
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-// Filter button functionality
-document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        console.log('Filter changed to:', this.textContent);
-        // Tambahkan logic untuk update chart di sini
-    });
-});
-</script>
-
 </body>
-</html> 
+</html>

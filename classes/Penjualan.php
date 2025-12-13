@@ -9,81 +9,57 @@ class Penjualan {
         $this->conn = $db->getConnection();
     }
 
-    // 1️⃣ Ambil semua data penjualan (sesuai struktur DB asli)
+    //  Ambil semua data penjualan (sesuai struktur DB asli)
     public function getAll() {
         $result = $this->conn->query("SELECT * FROM v_penjualan_all");
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
-    // 2️⃣ Ambil satu data penjualan berdasarkan ID
+    //  Ambil satu data penjualan berdasarkan ID
     public function getPenjualanById($idpenjualan) {
-        $stmt = $this->conn->prepare("
-            SELECT 
-                p.idpenjualan,
-                u.username AS petugas,
-                u.username AS kasir,
-                m.persen AS margin_persen,
-                IFNULL(p.subtotal_nilai, 0) AS subtotal,
-                IFNULL(p.ppn, 0) AS ppn,
-                IFNULL(p.total_nilai, 0) AS total,
-                DATE_FORMAT(p.created_at, '%d/%m/%Y %H:%i:%s') AS tanggal
-            FROM penjualan p
-            LEFT JOIN user u ON p.iduser = u.iduser
-            LEFT JOIN margin_penjualan m ON p.idmargin_penjualan = m.idmargin_penjualan
-            WHERE p.idpenjualan = ?
-        ");
+        $stmt = $this->conn->prepare("CALL sp_get_penjualan_by_id(?)");
         $stmt->bind_param("s", $idpenjualan);
         $stmt->execute();
+    
         $result = $stmt->get_result();
         $data = $result->fetch_assoc();
+    
         $stmt->close();
+        $this->conn->next_result(); // WAJIB setelah CALL, supaya tidak ada error multi result
+    
         return $data;
     }
+    
 
-    // 3️⃣ Ambil detail penjualan (barang yang dijual)
-    public function getDetailPenjualan($idpenjualan) {
-        $stmt = $this->conn->prepare("
-            SELECT 
-                dp.iddetail_penjualan,
-                dp.idbarang AS barang_idbarang,
-                b.nama AS nama_barang,
-                dp.harga_satuan AS harga_jual,
-                dp.jumlah AS jumlah_jual,
-                IFNULL(dp.subtotal, 0) AS sub_total_jual,
-                IFNULL(dp.subtotal, 0) AS subtotal,
-                sat.nama_satuan
-            FROM detail_penjualan dp
-            JOIN barang b ON dp.idbarang = b.idbarang
-            LEFT JOIN satuan sat ON b.idsatuan = sat.idsatuan
-            WHERE dp.penjualan_idpenjualan = ?
-        ");
-        $stmt->bind_param("s", $idpenjualan);
+    //  Ambil detail penjualan (barang yang dijual)
+    public function getDetailPenjualan($id) {
+        $stmt = $this->conn->prepare("CALL sp_get_detail_penjualan(?)");
+        $stmt->bind_param("s", $id);
         $stmt->execute();
         $result = $stmt->get_result();
         $data = $result->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
+        $this->conn->next_result();
         return $data;
     }
+    
 
-    // 4️⃣ Ambil barang yang tersedia untuk dijual (ada stok)
+    //  Ambil barang yang tersedia untuk dijual (ada stok)
     public function getBarangTersedia() {
-        $result = $this->conn->query("
-            SELECT 
-                b.idbarang,
-                b.nama AS nama_barang,
-                b.harga AS harga_beli,
-                IFNULL(fn_cek_stok_barang(b.idbarang), 0) AS stock,
-                sat.nama_satuan
-            FROM barang b
-            LEFT JOIN satuan sat ON b.idsatuan = sat.idsatuan
-            WHERE b.status = 1
-            AND fn_cek_stok_barang(b.idbarang) > 0
-            ORDER BY b.nama
-        ");
-        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt = $this->conn->prepare("CALL sp_get_barang_tersedia()");
+        $stmt->execute();
+    
+        $result = $stmt->get_result();
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+    
+        $stmt->close();
+        $this->conn->next_result(); // WAJIB agar SP berikutnya tidak error
+    
+        return $data;
     }
+    
 
-    // 4️⃣ B: Alias untuk getBarangTersedia (untuk backward compatibility)
+    //  B: Alias untuk getBarangTersedia (untuk backward compatibility)
     public function getBarangDropdown() {
         $barangList = $this->getBarangTersedia();
         // Tambahkan display_text untuk dropdown
@@ -93,7 +69,7 @@ class Penjualan {
         return $barangList;
     }
 
-    // 5️⃣ Ambil margin penjualan aktif untuk dropdown
+    // Ambil margin penjualan aktif untuk dropdown
     public function getMarginAktif() {
         $result = $this->conn->query("
             SELECT 
@@ -107,7 +83,7 @@ class Penjualan {
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
-    // 6️⃣ Generate ID Penjualan Otomatis
+    //  Generate ID Penjualan Otomatis
     public function generateIdPenjualan() {
         $result = $this->conn->query("
             SELECT IFNULL(MAX(CAST(SUBSTRING(idpenjualan, 3) AS UNSIGNED)), 0) + 1 AS next_num
@@ -117,7 +93,7 @@ class Penjualan {
         return 'PJ' . str_pad($row['next_num'], 3, '0', STR_PAD_LEFT);
     }
 
-    // 7️⃣ Insert penjualan baru (header) - SESUAI STRUKTUR DB ASLI
+    //  Insert penjualan baru (header) - SESUAI STRUKTUR DB ASLI
     public function insertPenjualan($iduser, $idmargin_penjualan) {
         $idpenjualan = $this->generateIdPenjualan();
         
@@ -137,7 +113,7 @@ class Penjualan {
         }
     }
 
-    // 8️⃣ Insert detail penjualan (memicu trigger stok & update total otomatis)
+    //  Insert detail penjualan (memicu trigger stok & update total otomatis)
     public function insertDetailPenjualan($idpenjualan, $idbarang, $jumlah, $harga_jual) {
         $stmt = $this->conn->prepare("
             INSERT INTO detail_penjualan (penjualan_idpenjualan, idbarang, harga_satuan, jumlah, subtotal)
@@ -154,7 +130,7 @@ class Penjualan {
         return true;
     }
 
-    // 9️⃣ Hapus detail penjualan
+    //  Hapus detail penjualan
     public function deleteDetailPenjualan($iddetail_penjualan) {
         $stmt = $this->conn->prepare("DELETE FROM detail_penjualan WHERE iddetail_penjualan = ?");
         $stmt->bind_param("i", $iddetail_penjualan);
@@ -163,7 +139,7 @@ class Penjualan {
         return $result;
     }
 
-    // 🔟 Hapus penjualan (header + detail)
+    // Hapus penjualan (header + detail)
     public function delete($idpenjualan) {
         // Hapus detail terlebih dahulu
         $stmt = $this->conn->prepare("DELETE FROM detail_penjualan WHERE penjualan_idpenjualan = ?");
@@ -179,7 +155,7 @@ class Penjualan {
         return $result;
     }
 
-    // 1️⃣1️⃣ Update total penjualan menggunakan SP yang sudah ada
+    // Update total penjualan menggunakan SP yang sudah ada
     public function updateTotalPenjualan($idpenjualan) {
         $stmt = $this->conn->prepare("CALL sp_update_total_penjualan(?)");
         $stmt->bind_param("s", $idpenjualan);
@@ -189,7 +165,7 @@ class Penjualan {
         return $result;
     }
 
-    // 1️⃣2️⃣ Hitung total penjualan (untuk summary/dashboard)
+    // Hitung total penjualan (untuk summary/dashboard)
     public function getTotalPenjualan($periode = 'all') {
         $where = "";
         if ($periode == 'today') {
@@ -209,7 +185,7 @@ class Penjualan {
         return $result ? $result->fetch_assoc() : ['total_transaksi' => 0, 'total_pendapatan' => 0];
     }
 
-    // 1️⃣3️⃣ Alias untuk backward compatibility
+    // Alias untuk backward compatibility
     public function createHeader($iduser, $idmargin_penjualan = 'M002') {
         // Jika tidak ada margin, gunakan margin default (10%)
         if (empty($idmargin_penjualan)) {

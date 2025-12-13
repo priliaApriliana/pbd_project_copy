@@ -257,7 +257,7 @@ if (isset($_POST['selesai'])) {
                                         <td><?= $d['nama_satuan'] ?></td>
                                         <td><?= $d['jumlah_jual'] ?></td>
                                         <td>Rp <?= number_format($d['harga_jual']) ?></td>
-                                        <td>Rp <?= number_format($d['sub_total_jual']) ?></td>
+                                        <td>Rp <?= number_format($d['subtotal']) ?></td>
                                         <td>
                                             <a href="?id=<?= $idpenjualan ?>&delete_detail=<?= $d['iddetail_penjualan'] ?>"
                                                class="btn btn-delete-custom btn-sm"

@@ -121,7 +121,7 @@ $label = ($show === 'all') ? 'Semua Barang' : 'Barang Aktif';
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                             <a href="delete.php?id=<?= $row['kode_barang'] ?>" class="action-btn btn-delete ms-2"
-                                                onclick="return confirm('Yakin ingin menghapus barang &quot;<?= htmlspecialchars($row['nama_barang']) ?>&quot;?')"
+                                                onclick="return confirm('Yakin ingin menghapus barang &quot;<?= htmlspecialchars($row['nama_barang']) ?>&quot;?')">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a>
                                         </td>
