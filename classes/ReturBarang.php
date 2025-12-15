@@ -135,6 +135,7 @@ class ReturBarang {
         $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
         $stmt->close();
+        
         return $result;
     }
 

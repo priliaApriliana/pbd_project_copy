@@ -80,7 +80,8 @@ class Penerimaan {
     public function insertDetailPenerimaan($idpenerimaan, $idbarang, $jumlah, $harga) {
         $stmt = $this->conn->prepare("
             INSERT INTO detail_penerimaan (idpenerimaan, barang_idbarang, jumlah_terima, harga_satuan_terima, sub_total_terima)
-            VALUES (?, ?, ?, ?, fn_hitung_subtotal(?, ?))
+            VALUES (?, ?, ?, ?, 
+            hitung_subtotal(?, ?))
         ");
         $stmt->bind_param("isiii", $idpenerimaan, $idbarang, $jumlah, $harga, $harga, $jumlah);
         $ok = $stmt->execute();

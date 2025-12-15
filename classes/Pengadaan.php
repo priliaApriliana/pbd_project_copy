@@ -106,7 +106,7 @@ class Pengadaan {
     // ==========================================
     
     public function updateTotal(int $idpengadaan): bool {
-        // 🔥 PBD: Gunakan Stored Procedure
+        // PBD: Gunakan Stored Procedure
         $stmt = $this->conn->prepare("CALL sp_update_total_pengadaan(?)");
         $stmt->bind_param("i", $idpengadaan);
         $result = $stmt->execute();
@@ -120,7 +120,7 @@ class Pengadaan {
     // ==========================================
     
     public function cancel(int $idpengadaan): bool {
-        // 🔥 PBD: Validasi business logic
+        // PBD: Validasi business logic
         // Cek apakah ada penerimaan selesai
         $stmt = $this->conn->prepare("
             SELECT COUNT(*) as total 
@@ -137,7 +137,7 @@ class Pengadaan {
             throw new Exception("Tidak bisa membatalkan pengadaan yang sudah ada penerimaan selesai!");
         }
         
-        // 🔥 Soft delete: Update status = 'C'
+        // Soft delete: Update status = 'C'
         $stmt = $this->conn->prepare("UPDATE pengadaan SET status = 'C' WHERE idpengadaan = ?");
         $stmt->bind_param("i", $idpengadaan);
         $result = $stmt->execute();
@@ -171,7 +171,7 @@ class Pengadaan {
     // ==========================================
     
     public function delete(int $idpengadaan): bool {
-        // ⚠️ Hard delete - hanya untuk development/testing
+        //  Hard delete - hanya untuk development/testing
         // Production seharusnya pakai cancel()
         
         // Validasi: cek penerimaan
